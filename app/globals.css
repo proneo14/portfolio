@@ -1,0 +1,180 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Win95 Retro Palette */
+  --background: #008080;
+  --foreground: #000000;
+  --card: #c0c0c0;
+  --card-foreground: #000000;
+  --popover: #c0c0c0;
+  --popover-foreground: #000000;
+  --primary: #000080;
+  --primary-foreground: #ffffff;
+  --secondary: #c0c0c0;
+  --secondary-foreground: #000000;
+  --muted: #a0a0a0;
+  --muted-foreground: #404040;
+  --accent: #000080;
+  --accent-foreground: #ffffff;
+  --destructive: #cc0000;
+  --destructive-foreground: #ffffff;
+  --border: #808080;
+  --input: #ffffff;
+  --ring: #000080;
+  --radius: 0px;
+
+  /* Win95 specific tokens */
+  --win-bg: #c0c0c0;
+  --win-highlight: #ffffff;
+  --win-shadow: #808080;
+  --win-dark-shadow: #404040;
+  --win-titlebar: #000080;
+  --win-titlebar-inactive: #808080;
+  --win-titlebar-text: #ffffff;
+  --win-desktop: #008080;
+  --win-terminal-bg: #0c0c0c;
+  --win-terminal-text: #33ff33;
+}
+
+@theme inline {
+  --font-sans: var(--font-vt323), 'Courier New', monospace;
+  --font-mono: var(--font-vt323), 'Courier New', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+}
+
+/* Win95 beveled button styles */
+.win-border-raised {
+  border: 2px solid;
+  border-color: var(--win-highlight) var(--win-dark-shadow) var(--win-dark-shadow) var(--win-highlight);
+  box-shadow: inset 1px 1px 0 var(--win-highlight), inset -1px -1px 0 var(--win-shadow);
+}
+
+.win-border-sunken {
+  border: 2px solid;
+  border-color: var(--win-dark-shadow) var(--win-highlight) var(--win-highlight) var(--win-dark-shadow);
+  box-shadow: inset 1px 1px 0 var(--win-shadow), inset -1px -1px 0 var(--win-highlight);
+}
+
+.win-border-field {
+  border: 2px solid;
+  border-color: var(--win-shadow) var(--win-highlight) var(--win-highlight) var(--win-shadow);
+}
+
+.win-button {
+  background: var(--win-bg);
+  border: 2px solid;
+  border-color: var(--win-highlight) var(--win-dark-shadow) var(--win-dark-shadow) var(--win-highlight);
+  box-shadow: inset 1px 1px 0 var(--win-highlight), inset -1px -1px 0 var(--win-shadow);
+  padding: 2px 8px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: #000000;
+  min-height: 23px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.win-button:active {
+  border-color: var(--win-dark-shadow) var(--win-highlight) var(--win-highlight) var(--win-dark-shadow);
+  box-shadow: inset 1px 1px 0 var(--win-shadow);
+  padding: 3px 7px 1px 9px;
+}
+
+/* CRT scanline overlay */
+.crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* Typing animation for terminal */
+@keyframes blink-caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.terminal-caret {
+  animation: blink-caret 1s step-end infinite;
+}
+
+@keyframes typing {
+  from { max-width: 0; }
+  to { max-width: 100%; }
+}
+
+.typing-text {
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+  animation: typing 1.5s steps(40, end) forwards;
+}
+
+/* Desktop icon hover */
+.desktop-icon {
+  cursor: pointer;
+  user-select: none;
+}
+
+.desktop-icon:hover .icon-label {
+  background: var(--win-titlebar);
+  color: var(--win-titlebar-text);
+}
+
+/* Start menu */
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.start-menu-enter {
+  animation: slideUp 0.1s ease-out forwards;
+}
+
+/* Pixel-style rendering for icons */
+.pixel-icon {
+  image-rendering: pixelated;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
