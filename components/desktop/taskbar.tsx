@@ -19,7 +19,13 @@ import {
   CalculatorIcon,
   MyComputerIcon,
   InboxIcon,
+  MinesweeperIcon,
+  ResumeIcon,
+  DisplayPropertiesIcon,
+  PicturesIcon,
 } from './win-icons'
+
+import { playClick, playWindowOpen } from '@/lib/sounds'
 
 interface TaskbarProps {
   windows: WindowData[]
@@ -60,6 +66,8 @@ const programItems = [
   { id: 'calculator', label: 'Calculator', icon: CalculatorIcon },
   { id: 'terminal', label: 'MS-DOS Prompt', icon: TerminalIcon },
   { id: 'inbox', label: 'Outlook Express', icon: InboxIcon },
+  { id: 'minesweeper', label: 'Minesweeper', icon: MinesweeperIcon },
+  { id: 'pictures', label: 'My Pictures', icon: PicturesIcon },
 ]
 
 export function Taskbar({ windows, dispatch }: TaskbarProps) {
@@ -90,6 +98,7 @@ export function Taskbar({ windows, dispatch }: TaskbarProps) {
   }, [startOpen])
 
   const openApp = (id: string) => {
+    playWindowOpen()
     dispatch({ type: 'OPEN_WINDOW', id })
     setStartOpen(false)
     setProgramsOpen(false)
@@ -140,10 +149,11 @@ export function Taskbar({ windows, dispatch }: TaskbarProps) {
                 <span className="text-[10px]">{'>'}</span>
               </button>
 
-              {/* Settings */}
+              {/* Settings - opens Display Properties */}
               <button
                 className="w-full text-left px-3 py-[5px] text-[13px] font-sans text-[#000000] hover:bg-[var(--win-titlebar)] hover:text-[var(--win-titlebar-text)] flex items-center gap-3"
                 onMouseEnter={() => setProgramsOpen(false)}
+                onClick={() => openApp('displayprops')}
               >
                 <StartMenuSettingsIcon size={20} />
                 <span className="flex-1">Settings</span>
@@ -227,6 +237,7 @@ export function Taskbar({ windows, dispatch }: TaskbarProps) {
             startOpen ? '!border-[var(--win-dark-shadow)] !border-t-[var(--win-dark-shadow)] !border-l-[var(--win-dark-shadow)] !border-r-[var(--win-highlight)] !border-b-[var(--win-highlight)] !shadow-[inset_1px_1px_0_var(--win-shadow)]' : ''
           }`}
           onClick={() => {
+            playClick()
             setStartOpen(!startOpen)
             if (!startOpen) setProgramsOpen(false)
           }}
@@ -252,6 +263,10 @@ export function Taskbar({ windows, dispatch }: TaskbarProps) {
               calculator: CalculatorIcon,
               network: FolderIcon,
               inbox: InboxIcon,
+              minesweeper: MinesweeperIcon,
+              resume: ResumeIcon,
+              displayprops: DisplayPropertiesIcon,
+              pictures: PicturesIcon,
             } as Record<string, React.ComponentType<{ size?: number }>>)[w.icon] || FolderIcon
 
             return (

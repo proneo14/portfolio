@@ -297,6 +297,92 @@ export function StartMenuRunIcon({ size = 16, className = '' }: IconProps) {
   )
 }
 
+export function MinesweeperIcon({ size = 32, className = '' }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" className={className} fill="none">
+      {/* Grid background */}
+      <rect x="4" y="4" width="24" height="24" fill="#c0c0c0" stroke="#000" strokeWidth="1" />
+      {/* Grid lines */}
+      <line x1="12" y1="4" x2="12" y2="28" stroke="#808080" strokeWidth="0.5" />
+      <line x1="20" y1="4" x2="20" y2="28" stroke="#808080" strokeWidth="0.5" />
+      <line x1="4" y1="12" x2="28" y2="12" stroke="#808080" strokeWidth="0.5" />
+      <line x1="4" y1="20" x2="28" y2="20" stroke="#808080" strokeWidth="0.5" />
+      {/* Mine */}
+      <circle cx="16" cy="16" r="4" fill="#000000" />
+      <line x1="16" y1="10" x2="16" y2="22" stroke="#000" strokeWidth="1.5" />
+      <line x1="10" y1="16" x2="22" y2="16" stroke="#000" strokeWidth="1.5" />
+      <line x1="12" y1="12" x2="20" y2="20" stroke="#000" strokeWidth="1" />
+      <line x1="20" y1="12" x2="12" y2="20" stroke="#000" strokeWidth="1" />
+      {/* Flag */}
+      <rect x="21" y="5" width="5" height="3" fill="#ff0000" />
+      <line x1="21" y1="5" x2="21" y2="11" stroke="#000" strokeWidth="1" />
+    </svg>
+  )
+}
+
+export function ResumeIcon({ size = 32, className = '' }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" className={className} fill="none">
+      {/* Page */}
+      <rect x="6" y="2" width="20" height="28" fill="#ffffff" stroke="#000" strokeWidth="1" />
+      {/* Fold corner */}
+      <path d="M20 2 L26 8 L20 8 Z" fill="#c0c0c0" stroke="#000" strokeWidth="0.5" />
+      {/* Header line */}
+      <rect x="9" y="5" width="8" height="2" fill="#000080" />
+      {/* Photo placeholder */}
+      <rect x="9" y="9" width="5" height="6" fill="#c0c0c0" stroke="#808080" strokeWidth="0.5" />
+      {/* Text lines */}
+      <line x1="16" y1="10" x2="22" y2="10" stroke="#000" strokeWidth="0.7" />
+      <line x1="16" y1="12" x2="21" y2="12" stroke="#808080" strokeWidth="0.5" />
+      <line x1="16" y1="14" x2="22" y2="14" stroke="#808080" strokeWidth="0.5" />
+      <line x1="9" y1="18" x2="22" y2="18" stroke="#000" strokeWidth="0.5" />
+      <line x1="9" y1="20" x2="20" y2="20" stroke="#808080" strokeWidth="0.5" />
+      <line x1="9" y1="22" x2="22" y2="22" stroke="#808080" strokeWidth="0.5" />
+      <line x1="9" y1="24" x2="18" y2="24" stroke="#808080" strokeWidth="0.5" />
+      <line x1="9" y1="26" x2="21" y2="26" stroke="#808080" strokeWidth="0.5" />
+    </svg>
+  )
+}
+
+export function DisplayPropertiesIcon({ size = 32, className = '' }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" className={className} fill="none">
+      {/* Monitor */}
+      <rect x="4" y="2" width="24" height="18" fill="#c0c0c0" stroke="#000" strokeWidth="1" />
+      <rect x="6" y="4" width="20" height="14" fill="#008080" stroke="#808080" strokeWidth="1" />
+      {/* Wallpaper colors */}
+      <rect x="7" y="5" width="6" height="6" fill="#000080" />
+      <rect x="13" y="5" width="6" height="6" fill="#800020" />
+      <rect x="19" y="5" width="6" height="6" fill="#254117" />
+      <rect x="7" y="11" width="6" height="6" fill="#708090" />
+      <rect x="13" y="11" width="12" height="6" fill="#008080" />
+      {/* Stand */}
+      <rect x="12" y="20" width="8" height="2" fill="#c0c0c0" stroke="#808080" strokeWidth="0.5" />
+      <rect x="10" y="22" width="12" height="2" fill="#c0c0c0" stroke="#000" strokeWidth="0.5" />
+      {/* Paintbrush */}
+      <rect x="22" y="22" width="2" height="6" fill="#8b4513" transform="rotate(-20 23 25)" />
+      <rect x="21" y="20" width="4" height="3" fill="#ff0000" transform="rotate(-20 23 21)" />
+    </svg>
+  )
+}
+
+export function PicturesIcon({ size = 32, className = '' }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" className={className} fill="none">
+      {/* Frame */}
+      <rect x="4" y="4" width="24" height="24" fill="#ffffff" stroke="#000" strokeWidth="1" />
+      <rect x="6" y="6" width="20" height="20" fill="#87CEEB" />
+      {/* Mountain */}
+      <polygon points="6,26 14,14 22,26" fill="#228B22" />
+      <polygon points="16,26 22,16 28,26" fill="#2E8B57" />
+      {/* Sun */}
+      <circle cx="22" cy="10" r="3" fill="#FFD700" />
+      {/* Bottom strip */}
+      <rect x="6" y="22" width="20" height="4" fill="#228B22" />
+    </svg>
+  )
+}
+
 export function ShutDownIcon({ size = 16, className = '' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16" className={className} fill="none">

@@ -1,6 +1,7 @@
 'use client'
 
 import type { WindowAction } from '@/lib/desktop-store'
+import { playWindowOpen } from '@/lib/sounds'
 import {
   MyComputerIcon,
   RecycleBinIcon,
@@ -14,6 +15,10 @@ import {
   InboxIcon,
   BriefcaseIcon,
   FileTextIcon,
+  MinesweeperIcon,
+  ResumeIcon,
+  DisplayPropertiesIcon,
+  PicturesIcon,
 } from './win-icons'
 
 const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
@@ -29,6 +34,10 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; className?: s
   inbox: InboxIcon,
   briefcase: BriefcaseIcon,
   'file-text': FileTextIcon,
+  minesweeper: MinesweeperIcon,
+  resume: ResumeIcon,
+  displayprops: DisplayPropertiesIcon,
+  pictures: PicturesIcon,
 }
 
 interface DesktopIconProps {
@@ -44,7 +53,7 @@ export function DesktopIcon({ id, label, icon, dispatch }: DesktopIconProps) {
   return (
     <button
       className="desktop-icon flex flex-col items-center gap-1 w-[75px] p-1 focus:outline-none group"
-      onDoubleClick={() => dispatch({ type: 'OPEN_WINDOW', id })}
+      onDoubleClick={() => { playWindowOpen(); dispatch({ type: 'OPEN_WINDOW', id }) }}
       aria-label={`Open ${label}`}
     >
       <div className="w-[40px] h-[40px] flex items-center justify-center pixel-icon">

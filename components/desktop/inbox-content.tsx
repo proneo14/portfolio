@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { playClick, playError } from '@/lib/sounds'
 
 const emails = [
   {
@@ -33,20 +34,63 @@ const emails = [
   },
 ]
 
+// TODO: Replace with your Formspree form ID from https://formspree.io
+// 1. Create a free account at formspree.io
+// 2. Create a new form, get the form ID (e.g., "xrgvqkld")
+// 3. Replace "YOUR_FORM_ID" below with your actual ID
+const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORM_ID'
+
 export function InboxContent() {
   const [selected, setSelected] = useState<number | null>(null)
   const [composing, setComposing] = useState(false)
   const [composeData, setComposeData] = useState({ name: '', email: '', subject: '', body: '' })
-  const [sent, setSent] = useState(false)
+  const [sendState, setSendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [errorMsg, setErrorMsg] = useState('')
 
-  const handleSend = () => {
-    if (composeData.name && composeData.email && composeData.body) {
-      setSent(true)
-      setTimeout(() => {
-        setComposing(false)
-        setSent(false)
-        setComposeData({ name: '', email: '', subject: '', body: '' })
-      }, 2000)
+  const handleSend = async () => {
+    if (!composeData.name || !composeData.email || !composeData.body) {
+      playError()
+      setErrorMsg('Please fill in all required fields.')
+      setSendState('error')
+      setTimeout(() => { setSendState('idle'); setErrorMsg('') }, 3000)
+      return
+    }
+
+    setSendState('sending')
+
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: composeData.name,
+          _replyto: composeData.email,
+          email: composeData.email,
+          subject: composeData.subject || '(No subject)',
+          message: composeData.body,
+        }),
+      })
+
+      if (res.ok) {
+        playClick()
+        setSendState('sent')
+        setTimeout(() => {
+          setComposing(false)
+          setSendState('idle')
+          setComposeData({ name: '', email: '', subject: '', body: '' })
+        }, 3000)
+      } else {
+        // If Formspree isn't configured yet, show a helpful message
+        playError()
+        setSendState('error')
+        setErrorMsg('Message could not be sent. (Configure your Formspree ID in inbox-content.tsx)')
+        setTimeout(() => { setSendState('idle'); setErrorMsg('') }, 4000)
+      }
+    } catch {
+      playError()
+      setSendState('error')
+      setErrorMsg('Network error. Check your connection.')
+      setTimeout(() => { setSendState('idle'); setErrorMsg('') }, 4000)
     }
   }
 
@@ -65,7 +109,7 @@ export function InboxContent() {
       <div className="flex items-center gap-2 px-2 py-1 bg-[var(--win-bg)] border-b border-b-[var(--win-shadow)]">
         <button
           className="win-button text-[11px] h-[20px] px-3"
-          onClick={() => { setComposing(true); setSelected(null) }}
+          onClick={() => { playClick(); setComposing(true); setSelected(null) }}
         >
           New Message
         </button>
@@ -75,7 +119,7 @@ export function InboxContent() {
         {composing && (
           <button
             className="win-button text-[11px] h-[20px] px-3"
-            onClick={() => setComposing(false)}
+            onClick={() => { setComposing(false); setSendState('idle') }}
           >
             Back to Inbox
           </button>
@@ -85,23 +129,28 @@ export function InboxContent() {
       {composing ? (
         /* Compose view */
         <div className="flex-1 flex flex-col p-2 gap-1">
-          {sent ? (
+          {sendState === 'sent' ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-3">
-              <div className="text-[18px] font-sans text-[#008000] font-bold">Message Sent!</div>
+              <div className="text-[18px] font-sans text-[#008000] font-bold">✉ Message Sent!</div>
               <div className="text-[13px] font-sans text-[#808080]">
                 {'Thanks for reaching out. I\'ll get back to you soon!'}
               </div>
             </div>
+          ) : sendState === 'error' ? (
+            <div className="flex-1 flex flex-col items-center justify-center gap-3">
+              <div className="text-[18px] font-sans text-[#cc0000] font-bold">⚠ Error</div>
+              <div className="text-[13px] font-sans text-[#808080]">{errorMsg}</div>
+            </div>
           ) : (
             <>
               <div className="flex items-center gap-2">
-                <span className="text-[12px] font-sans text-[#000000] w-[60px] shrink-0">To:</span>
+                <span className="text-[12px] font-sans text-[#000000] w-[70px] shrink-0">To:</span>
                 <div className="flex-1 win-border-field bg-[#e0e0e0] px-2 h-[20px] flex items-center">
                   <span className="text-[12px] font-sans text-[#808080]">Portfolio Admin</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[12px] font-sans text-[#000000] w-[60px] shrink-0">Your Name:</span>
+                <span className="text-[12px] font-sans text-[#000000] w-[70px] shrink-0">Your Name: *</span>
                 <div className="flex-1 win-border-field bg-[#ffffff] h-[20px] flex items-center">
                   <input
                     value={composeData.name}
@@ -112,7 +161,7 @@ export function InboxContent() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[12px] font-sans text-[#000000] w-[60px] shrink-0">Your Email:</span>
+                <span className="text-[12px] font-sans text-[#000000] w-[70px] shrink-0">Your Email: *</span>
                 <div className="flex-1 win-border-field bg-[#ffffff] h-[20px] flex items-center">
                   <input
                     value={composeData.email}
@@ -124,7 +173,7 @@ export function InboxContent() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[12px] font-sans text-[#000000] w-[60px] shrink-0">Subject:</span>
+                <span className="text-[12px] font-sans text-[#000000] w-[70px] shrink-0">Subject:</span>
                 <div className="flex-1 win-border-field bg-[#ffffff] h-[20px] flex items-center">
                   <input
                     value={composeData.subject}
@@ -135,6 +184,7 @@ export function InboxContent() {
                 </div>
               </div>
               <div className="flex-1 flex flex-col gap-1 mt-1">
+                <span className="text-[12px] font-sans text-[#000000]">Message: *</span>
                 <div className="flex-1 win-border-field bg-[#ffffff]">
                   <textarea
                     value={composeData.body}
@@ -145,12 +195,17 @@ export function InboxContent() {
                 </div>
               </div>
               <div className="flex items-center gap-2 mt-1">
-                <button className="win-button text-[12px] px-4" onClick={handleSend}>
-                  Send
+                <button
+                  className="win-button text-[12px] px-4"
+                  onClick={handleSend}
+                  disabled={sendState === 'sending'}
+                >
+                  {sendState === 'sending' ? 'Sending...' : 'Send'}
                 </button>
                 <button className="win-button text-[12px] px-4" onClick={() => setComposing(false)}>
                   Cancel
                 </button>
+                <span className="text-[10px] font-sans text-[#808080] ml-2">* Required</span>
               </div>
             </>
           )}
@@ -173,7 +228,7 @@ export function InboxContent() {
                 } ${!email.read ? 'font-bold' : ''}`}
                 onClick={() => setSelected(i)}
               >
-                <span className="w-[24px] text-center">{email.read ? '' : '*'}</span>
+                <span className="w-[24px] text-center">{email.read ? '' : '✉'}</span>
                 <span className="w-[160px] truncate">{email.from}</span>
                 <span className="flex-1 truncate">{email.subject}</span>
                 <span className="w-[80px]">{email.date}</span>
@@ -198,7 +253,9 @@ export function InboxContent() {
       {/* Status bar */}
       <div className="flex items-center px-2 py-[2px] bg-[var(--win-bg)] border-t border-t-[var(--win-shadow)]">
         <span className="text-[11px] font-sans text-[#000000]">
-          {composing ? 'Composing new message...' : `${emails.length} message(s), ${emails.filter(e => !e.read).length} unread`}
+          {composing
+            ? sendState === 'sending' ? 'Connecting to mail server...' : 'Composing new message...'
+            : `${emails.length} message(s), ${emails.filter(e => !e.read).length} unread`}
         </span>
       </div>
     </div>

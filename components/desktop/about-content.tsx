@@ -17,40 +17,43 @@ export function AboutContent() {
         ABOUT ME
 ===================================
 
-Name:       Portfolio Admin
-Title:      Full-Stack Developer & Maker
-Location:   United States
+Name:       Neo Prohnitchi
+Title:      Mechanical Engineering
+            Student & Full-Stack Dev
+Location:   Ottawa, ON
 
 -----------------------------------
         SUMMARY
 -----------------------------------
 
-Passionate developer with a love for
-building things that work -- both in
-code and in the physical world.
+Mech-E student at uOttawa with a
+passion for bridging the physical
+and digital worlds.
 
-I specialize in full-stack web dev,
-embedded systems, and creative
-problem solving.
+I build full-stack apps, tinker with
+embedded systems, run a home lab,
+and 3D-print everything in between.
 
 -----------------------------------
         SKILLS
 -----------------------------------
 
 Languages:  JavaScript/TypeScript,
-            Python, Go, C/C++
+            Python, Go, C/C++, Rust
 Frontend:   React, Next.js, Tailwind
 Backend:    Node.js, FastAPI, Go
-Hardware:   Arduino, Raspberry Pi,
-            3D Printing (Bambu Lab)
-Tools:      Git, Docker, Linux
+AI/ML:      OpenCV, YOLO, ONNX, LLMs
+Hardware:   Arduino, RPi, ESP32,
+            Bambu Lab A1 (3D Print)
+DevOps:     Docker, Linux, Nginx,
+            Windows Server 2025
 
 -----------------------------------
         CONTACT
 -----------------------------------
 
-GitHub:     github.com/admin
-Email:      hello@portfolio.dev
+GitHub:     github.com/proneo14
+Email:      neoprohnitchi@gmail.com
 
 ===================================
   "rm -rf / just kidding... unless?"

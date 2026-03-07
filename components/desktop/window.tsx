@@ -2,6 +2,7 @@
 
 import { useRef, useCallback } from 'react'
 import type { WindowData, WindowAction } from '@/lib/desktop-store'
+import { playClick, playWindowClose, playMinimize, playWindowOpen } from '@/lib/sounds'
 import {
   MyComputerIcon,
   RecycleBinIcon,
@@ -14,6 +15,10 @@ import {
   NetworkIcon,
   InboxIcon,
   FileTextIcon,
+  MinesweeperIcon,
+  ResumeIcon,
+  DisplayPropertiesIcon,
+  PicturesIcon,
 } from './win-icons'
 
 const titleIconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
@@ -28,6 +33,10 @@ const titleIconMap: Record<string, React.ComponentType<{ size?: number; classNam
   network: NetworkIcon,
   inbox: InboxIcon,
   'file-text': FileTextIcon,
+  minesweeper: MinesweeperIcon,
+  resume: ResumeIcon,
+  displayprops: DisplayPropertiesIcon,
+  pictures: PicturesIcon,
 }
 
 interface WindowProps {
@@ -131,6 +140,7 @@ export function Window({ data, dispatch, children, highestZ }: WindowProps) {
               onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.stopPropagation()
+                playMinimize()
                 dispatch({ type: 'MINIMIZE_WINDOW', id: data.id })
               }}
               aria-label="Minimize"
@@ -144,6 +154,7 @@ export function Window({ data, dispatch, children, highestZ }: WindowProps) {
               onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.stopPropagation()
+                playWindowOpen()
                 dispatch({ type: 'TOGGLE_MAXIMIZE', id: data.id })
               }}
               aria-label="Maximize"
@@ -158,6 +169,7 @@ export function Window({ data, dispatch, children, highestZ }: WindowProps) {
               onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.stopPropagation()
+                playWindowClose()
                 dispatch({ type: 'CLOSE_WINDOW', id: data.id })
               }}
               aria-label="Close"

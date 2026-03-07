@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { playStartup, playHDDSeek } from '@/lib/sounds'
 
 const BIOS_LINES = [
   'Award Modular BIOS v6.00PG, An Energy Star Ally',
@@ -51,6 +52,8 @@ export function BootScreen({ onComplete }: BootScreenProps) {
       timers.push(
         setTimeout(() => {
           setVisibleLines(i + 1)
+          // Play HDD seek sound every few lines
+          if (i % 3 === 0) playHDDSeek()
           if (i === BIOS_LINES.length - 1) {
             setTimeout(() => setPhase('prompt'), 400)
           }
@@ -63,6 +66,7 @@ export function BootScreen({ onComplete }: BootScreenProps) {
 
   const handleKeyDown = useCallback(() => {
     if (phase === 'prompt') {
+      playStartup()
       setPhase('done')
       onComplete()
     }
@@ -70,6 +74,7 @@ export function BootScreen({ onComplete }: BootScreenProps) {
 
   const handleClick = useCallback(() => {
     if (phase === 'prompt') {
+      playStartup()
       setPhase('done')
       onComplete()
     }

@@ -24,12 +24,12 @@ export function ResumeContent() {
         <div className="max-w-[540px] mx-auto bg-[#ffffff] border border-[#c0c0c0] p-6 shadow-[2px_2px_0_#808080]">
           {/* Header */}
           <div className="text-center mb-4 pb-3 border-b-2 border-b-[#000000]">
-            <div className="text-[22px] font-sans text-[#000000] font-bold tracking-wider">PORTFOLIO ADMIN</div>
+            <div className="text-[22px] font-sans text-[#000000] font-bold tracking-wider">NEO PROHNITCHI</div>
             <div className="text-[13px] font-sans text-[#808080] mt-1">
               Mechanical Engineering Student & Full-Stack Developer
             </div>
             <div className="text-[12px] font-sans text-[#808080] mt-1">
-              Ottawa, ON | hello@portfolio.dev | github.com/admin
+              Ottawa, ON | neoprohnitchi@gmail.com | github.com/proneo14
             </div>
           </div>
 
