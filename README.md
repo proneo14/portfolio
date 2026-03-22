@@ -3,6 +3,9 @@
 A retro Windows 95-themed developer portfolio built with **Next.js**, **React**, and **TypeScript**. No component libraries, no CSS frameworks beyond Tailwind — just clean, handcrafted pixel-art UI that runs entirely in the browser.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Code of Conduct](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-blue.svg)](CODE_OF_CONDUCT.md)
+[![Contributing](https://img.shields.io/badge/Contributing-Guidelines-green.svg)](CONTRIBUTING.md)
+[![Security](https://img.shields.io/badge/Security-Policy-red.svg)](SECURITY.md)
 
 ---
 
