@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { VT323 } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const vt323 = VT323({ weight: '400', subsets: ['latin'], variable: '--font-vt323' })
@@ -41,7 +40,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${vt323.variable} font-sans antialiased overflow-hidden`}>
         {children}
-        <Analytics />
       </body>
     </html>
   )
