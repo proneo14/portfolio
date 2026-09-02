@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "portfolio",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./build/client",
+    // Routes are prerendered to real HTML files, so a direct hit on /projects
+    // serves /projects/index.html. This only catches client-side routes that
+    // were not in the prerender list.
+    "not_found_handling": "single-page-application"
+  }
+
+  // When server code is eventually needed (contact form, view counter, signed
+  // gallery URLs), add:
+  //   "main": "./workers/app.ts",
+  //   "assets": { ..., "binding": "ASSETS", "run_worker_first": ["/api/*"] }
+  // then install @cloudflare/vite-plugin and add cloudflare() to vite.config.ts.
+}

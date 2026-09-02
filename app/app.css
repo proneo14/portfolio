@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+/* Self-hosted woff2, weight axis only. Fontsource sets font-display: swap.
+   Never a Google Fonts link tag in production. */
+@import "@fontsource-variable/archivo/wght.css";
+@import "@fontsource-variable/inter/wght.css";
+@import "@fontsource-variable/jetbrains-mono/wght.css";
+
+/* ---------------------------------------------------------------------------
+   Design tokens. Mirrors DESIGN.md. Change values there first, then here.
+   --------------------------------------------------------------------------- */
+@theme {
+  /* Surfaces */
+  /* Off-black, not #000000. Near enough that emissive tail lights still read as
+     luminous, far enough to dodge OLED smearing on scroll. */
+  --color-canvas: #050505;
+  --color-surface-soft: #0f0f0f;
+  --color-surface-card: #1a1a1a;
+  --color-surface-elevated: #262626;
+  --color-carbon: #2b2b2b;
+
+  /* Hairlines */
+  /* Ordering matters: "strong" must actually be more visible than the base.
+     These were inverted, so structural boundaries read fainter than row
+     dividers. */
+  --color-hairline: #2e2e2e;
+  --color-hairline-strong: #4a4a4a;
+
+  /* Text */
+  --color-ink: #ffffff;
+  --color-body: #bbbbbb;
+  --color-body-strong: #e6e6e6;
+  --color-muted: #7e7e7e;
+
+  /* Accent, sampled from the CLS63 S tail lights.
+     accent fails AA at body sizes on black, so it is never used for small text.
+     Use accent-bright where accent-colored small text is genuinely needed. */
+  --color-accent: #e02b1d;
+  --color-accent-bright: #ff5c47;
+  --color-accent-deep: #8f1a11;
+
+  /* Reserved exclusively for the turn-signal easter egg. */
+  --color-signal: #f2a13c;
+
+  /* Semantic */
+  --color-warning: #f4b400;
+  --color-success: #0fa336;
+
+  /* Families */
+  --font-display: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  /* Display scale. Negative tracking because Archivo spaces loose when large. */
+  --text-display-mega: 5rem;
+  --text-display-mega--line-height: 1;
+  --text-display-mega--letter-spacing: -0.5px;
+  --text-display-mega--font-weight: 700;
+
+  --text-display-xl: 4rem;
+  --text-display-xl--line-height: 1;
+  --text-display-xl--letter-spacing: -0.5px;
+  --text-display-xl--font-weight: 700;
+
+  --text-display-lg: 3.5rem;
+  --text-display-lg--line-height: 1.05;
+  --text-display-lg--letter-spacing: -0.5px;
+  --text-display-lg--font-weight: 700;
+
+  --text-display-md: 2.5rem;
+  --text-display-md--line-height: 1.1;
+  --text-display-md--letter-spacing: -0.25px;
+  --text-display-md--font-weight: 700;
+
+  --text-display-sm: 2rem;
+  --text-display-sm--line-height: 1.15;
+  --text-display-sm--font-weight: 700;
+
+  /* A single dramatic figure. Borrowed from the Ferrari number-display token. */
+  --text-stat: 5rem;
+  --text-stat--line-height: 1;
+  --text-stat--letter-spacing: -1.6px;
+  --text-stat--font-weight: 700;
+
+  --text-title-lg: 1.5rem;
+  --text-title-lg--line-height: 1.3;
+  --text-title-lg--font-weight: 700;
+
+  /* Technical layer. Spec values, dates and metadata live here. */
+  --text-spec: 2rem;
+  --text-spec--line-height: 1.15;
+  --text-spec--letter-spacing: -0.5px;
+
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.3;
+  --text-label--letter-spacing: 1.8px;
+
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.5;
+  --text-meta--letter-spacing: 0.5px;
+
+  --text-nav: 0.8125rem;
+  --text-nav--line-height: 1.4;
+  --text-nav--letter-spacing: 1.2px;
+
+  --text-button: 0.875rem;
+  --text-button--line-height: 1;
+  --text-button--letter-spacing: 1.5px;
+  --text-button--font-weight: 700;
+
+  /* Band rhythm */
+  --spacing-band: 6rem;
+  --spacing-band-sm: 3rem;
+
+  --container-page: 1400px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Tail light switch-on. Opacity only, so it stays on the compositor.
+     The shape is a filament warming up: a fast flicker to roughly two thirds, a
+     dip, a second surge, then a slow ramp to full. A plain fade reads as a CSS
+     transition; this reads as a light turning on.
+
+     Every step is scaled by --bloom-peak, the layer's own target opacity. A
+     hardcoded `opacity: 1` at the last keyframe would override the per-layer
+     opacity and animate every layer to full, which turns the composition into
+     one flat blob at rest. */
+  --animate-bloom-in: bloom-in 1.9s var(--ease-out-expo) both;
+
+  @keyframes bloom-in {
+    0% {
+      opacity: 0;
+    }
+    9% {
+      opacity: calc(var(--bloom-peak, 1) * 0.62);
+    }
+    14% {
+      opacity: calc(var(--bloom-peak, 1) * 0.22);
+    }
+    22% {
+      opacity: calc(var(--bloom-peak, 1) * 0.78);
+    }
+    28% {
+      opacity: calc(var(--bloom-peak, 1) * 0.4);
+    }
+    100% {
+      opacity: var(--bloom-peak, 1);
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Layer scale. Documented so z-index is never guessed inline.
+   --------------------------------------------------------------------------- */
+:root {
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky-nav: 20;
+  --z-overlay: 30;
+  --z-dialog: 40;
+  --z-grain: 50;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+@layer base {
+  html {
+    color-scheme: dark;
+    /* Removes the 300ms double-tap zoom delay that makes touch feel sluggish. */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    scrollbar-gutter: stable;
+    /* Keeps in-page jumps and focus scrolls clear of the sticky nav. */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.5;
+    /* Decorative overflow in art-directed sections must never create a
+       horizontal scrollbar on mobile. */
+    overflow-x: hidden;
+  }
+
+  /* Display voice. Uppercase 700 is the default for h1 and h2. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  /* Every number, date and metric is mono. This is the technical layer. */
+  time,
+  code,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent-bright);
+    outline-offset: 3px;
+  }
+
+  /* Anchored headings must not land under the sticky nav. */
+  :target {
+    scroll-margin-top: 6rem;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion.
+
+   Deliberately not a blanket `* { transition-duration: 0.01ms !important }`
+   reset. That creates invisible timing conflicts wherever CSS and GSAP touch
+   the same element. Per-component handling lives in the components themselves,
+   and GSAP is gated through gsap.matchMedia().
+
+   The rules below only cover the page-level cases where there is no component
+   to hold the logic.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
